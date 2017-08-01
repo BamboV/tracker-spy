@@ -1,4 +1,4 @@
-package main
+package tracker_spy
 
 type DataRepository interface {
 	GetAll() []Tracker

@@ -1,4 +1,4 @@
-package main
+package tracker_spy
 
 import (
 	"encoding/json"
@@ -20,15 +20,13 @@ func (s *SpyServer) StartListen(spy Spy) {
 			break
 		case http.MethodPost:
 			decoder := json.NewDecoder(r.Body)
-
 			tracker := Tracker{}
 			err := decoder.Decode(&tracker)
 
-			if err != nil || tracker.Name == "" || tracker.Source == "" || tracker.ID == 0 {
+			if err != nil || tracker.Name == "" || tracker.Source == "" || tracker.TrackerID == 0 {
 				w.WriteHeader(400)
 				return
 			}
-
 			data := spy.AddToSpyList(tracker)
 			str, _ := json.Marshal(data)
 			w.Write(str)

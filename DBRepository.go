@@ -1,4 +1,4 @@
-package main
+package tracker_spy
 
 import (
 	"github.com/jinzhu/gorm"

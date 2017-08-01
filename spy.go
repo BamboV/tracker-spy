@@ -1,8 +1,19 @@
-package main
+package tracker_spy
+
+import "github.com/bamboV/torrent_center/client"
 
 type Spy struct {
 	repository DataRepository
-	torrent TorrentClient
+	torrent client.CenterClient
+}
+
+func NewSpy(repository DataRepository, torrent client.CenterClient) Spy {
+	spy := Spy{
+		repository: repository,
+		torrent: torrent,
+	}
+
+	return spy
 }
 
 func (s *Spy) GetSpyList() []Tracker{
@@ -28,10 +39,15 @@ func (s *Spy)UpdateAll() []Tracker{
 }
 
 func (s *Spy) update(tracker Tracker) bool {
-	remoteTorrent := s.torrent.GetTorrent(tracker.Source, tracker.TrackerID)
-	if remoteTorrent.LastUpdate != tracker.LastUpdate {
-		if s.torrent.Download(tracker) {
-			tracker.LastUpdate = remoteTorrent.LastUpdate
+	remoteTorrent, err := s.torrent.GetDistribution(tracker.Source, tracker.TrackerID)
+
+	if err != nil {
+		return false
+	}
+
+	if remoteTorrent.LastUpdated != tracker.LastUpdate {
+		if s.torrent.Download(remoteTorrent.MagnetLink) {
+			tracker.LastUpdate = remoteTorrent.LastUpdated
 			s.repository.Update(tracker)
 			return true
 		}
