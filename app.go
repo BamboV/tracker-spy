@@ -24,7 +24,7 @@ func main() {
 
 	defer db.Close()
 
-	switch(os.Args[1]) {
+	switch os.Args[1] {
 	case "install":
 		if !db.HasTable(&Tracker{}) {
 			db.CreateTable(&Tracker{})

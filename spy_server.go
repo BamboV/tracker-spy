@@ -19,12 +19,16 @@ func (s *SpyServer) StartListen(spy Spy) {
 			w.Write(str)
 			break
 		case http.MethodPost:
-			id, _ := strconv.Atoi(r.PostForm.Get("id"))
-			tracker := Tracker{
-				Name: r.PostForm.Get("name"),
-				Source: r.PostForm.Get("source"),
-				TrackerID: uint(id),
+			decoder := json.NewDecoder(r.Body)
+
+			tracker := Tracker{}
+			err := decoder.Decode(&tracker)
+
+			if err != nil || tracker.Name == "" || tracker.Source == "" || tracker.ID == 0 {
+				w.WriteHeader(400)
+				return
 			}
+
 			data := spy.AddToSpyList(tracker)
 			str, _ := json.Marshal(data)
 			w.Write(str)

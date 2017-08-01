@@ -1,9 +1,9 @@
 package main
 
 type Tracker struct{
-	ID uint `gorm:"primary_key"`
-	TrackerID uint `gorm:"size:255;unique_index"`
-	Name string
-	Source string
-	LastUpdate string
+	ID uint `gorm:"primary_key" json:"id"`
+	TrackerID uint `gorm:"size:255;unique_index" json:"tracker_id"`
+	Name string `json:"name"`
+	Source string `json:"source"`
+	LastUpdate string `json:"last_update"`
 }
