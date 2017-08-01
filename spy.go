@@ -31,24 +31,23 @@ func (s *Spy) Delete(id uint) {
 func (s *Spy)UpdateAll() []Tracker{
 	updated := []Tracker{}
 	for _, value := range s.GetSpyList() {
-		if s.update(value) {
+		if s.update(&value) {
 			updated = append(updated, value)
 		}
 	}
 	return updated
 }
 
-func (s *Spy) update(tracker Tracker) bool {
+func (s *Spy) update(tracker *Tracker) bool {
 	remoteTorrent, err := s.torrent.GetDistribution(tracker.Source, tracker.TrackerID)
 
 	if err != nil {
 		return false
 	}
-
 	if remoteTorrent.LastUpdated != tracker.LastUpdate {
 		if s.torrent.Download(remoteTorrent.MagnetLink) {
 			tracker.LastUpdate = remoteTorrent.LastUpdated
-			s.repository.Update(tracker)
+			s.repository.Update(*tracker)
 			return true
 		}
 	}

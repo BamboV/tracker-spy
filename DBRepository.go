@@ -22,7 +22,7 @@ func (d DBRepository) Create(tracker Tracker) Tracker{
 }
 
 func (d DBRepository) Update(tracker Tracker) Tracker{
-	d.DB.Update(&tracker)
+	d.DB.Save(&tracker)
 	return tracker
 }
 
