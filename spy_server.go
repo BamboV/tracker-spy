@@ -44,5 +44,11 @@ func (s *SpyServer) StartListen(spy Spy) {
 		w.Write(str)
 	})
 
+	http.HandleFunc("/sources/", func(w http.ResponseWriter, r *http.Request) {
+		data, _ := spy.GetSources()
+		str, _ := json.Marshal(data)
+		w.Write(str)
+	})
+
 	http.ListenAndServe(":80", nil)
 }

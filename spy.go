@@ -1,6 +1,9 @@
 package tracker_spy
 
-import "github.com/bamboV/torrent_center/client"
+import (
+	"github.com/bamboV/torrent_center/client"
+	"github.com/bamboV/torrent_center"
+)
 
 type Spy struct {
 	repository DataRepository
@@ -26,6 +29,10 @@ func (s *Spy) AddToSpyList(tracker Tracker) Tracker {
 
 func (s *Spy) Delete(id uint) {
 	s.repository.Delete(id)
+}
+
+func (s *Spy) GetSources() ([]torrent_center.Tracker, error) {
+	return s.torrent.GetTrackers()
 }
 
 func (s *Spy)UpdateAll() []Tracker{
